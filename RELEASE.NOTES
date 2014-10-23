@@ -1,0 +1,14 @@
+2014-07-09 - Snort 2.9.6.2
+[*] New additions
+* Added the ability to specify additional custom 'x-forwarder-for' http field names. 
+  A new http inspection configuration element is used to specify a set of
+  field names and their respective precedence order.  
+
+* Added cache flow timeout for IP.
+
+[*] Improvements
+* Fixed handling of ICMPv6 traffic.
+
+* Fixed inline stream reassembly during file processing.
+
+* Addressed race condition issue with Perfmon stats file rollover.
