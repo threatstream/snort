@@ -114,6 +114,7 @@
 #include "output-plugins/spo_alert_full.h"
 #include "output-plugins/spo_alert_unixsock.h"
 #include "output-plugins/spo_csv.h"
+#include "output-plugins/spo_hpfeeds.h"
 #include "output-plugins/spo_log_null.h"
 #include "output-plugins/spo_log_ascii.h"
 #include "output-plugins/spo_unified2.h"
@@ -1543,6 +1544,7 @@ void RegisterOutputPlugins(void)
     AlertUnixSockSetup();
 #endif /* !WIN32 */
     AlertCSVSetup();
+    AlertHPFeedsSetup();
     LogNullSetup();
     Unified2Setup();
     LogAsciiSetup();
