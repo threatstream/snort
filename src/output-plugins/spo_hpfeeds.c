@@ -365,6 +365,7 @@ static void HPFeedsAlert(Packet *p, char *msg, void *arg, Event *event)
       return;
 
     json_t *json_record = json_object();
+    json_object_set_new(json_record, "sensor", json_string((char*)config->hpfeeds_ident));
 
     char timestamp[TIMEBUF_SIZE];
     struct tm* lt = localtime(&p->pkth->ts.tv_sec);
@@ -380,12 +381,20 @@ static void HPFeedsAlert(Packet *p, char *msg, void *arg, Event *event)
     /* EVENT */
     if (event != NULL)
     {
-      json_object_set_new(json_record, "sig_generator", json_integer((unsigned long) event->sig_generator));
-      json_object_set_new(json_record, "sig_id", json_integer((unsigned long) event->sig_id));
-      json_object_set_new(json_record, "sig_rev", json_integer((unsigned long) event->sig_rev));
+      snprintf(construct_buf, BUF_LEN, "%d:%d:%d", event->sig_generator, event->sig_id, event->sig_rev);
+      json_object_set_new(json_record, "header", json_string(construct_buf));
+      json_object_set_new(json_record, "classification", json_integer(event->classification)); 
+      json_object_set_new(json_record, "priority",       json_integer(event-priority));  
+    }
+    else:
+    {
+      json_object_set_new(json_record, "header", json_string("null"));
+      json_object_set_new(json_record, "classification", json_integer(-1)); 
+      json_object_set_new(json_record, "priority",       json_integer(-1));  
     }
 
-    json_object_set_new(json_record, "msg", json_string((char *) msg ? msg : "null"));  
+    json_object_set_new(json_record, "signature", json_string((char *) msg ? msg : "null")); 
+    
 
     /* IP */
     if (IPH_IS_VALID(p))
@@ -410,15 +419,15 @@ static void HPFeedsAlert(Packet *p, char *msg, void *arg, Event *event)
       {
         case IPPROTO_UDP:
         case IPPROTO_TCP:
-          json_object_set_new(json_record, "srcport", json_integer(p->sp));
-          json_object_set_new(json_record, "dstport", json_integer(p->dp));
+          json_object_set_new(json_record, "source_port",      json_integer(p->sp));
+          json_object_set_new(json_record, "destination_port", json_integer(p->dp));
           break;
         default:
           break;
       };
 
-      json_object_set_new(json_record, "src", json_string((char *) inet_ntoa(GET_SRC_ADDR(p))));
-      json_object_set_new(json_record, "dst", json_string((char *) inet_ntoa(GET_DST_ADDR(p))));
+      json_object_set_new(json_record, "source_ip",      json_string((char *) inet_ntoa(GET_SRC_ADDR(p))));
+      json_object_set_new(json_record, "destination_ip", json_string((char *) inet_ntoa(GET_DST_ADDR(p))));
 
       json_object_set_new(json_record, "ttl", json_integer(GET_IPH_TTL(p)));
       json_object_set_new(json_record, "tos", json_integer(GET_IPH_TOS(p)));
