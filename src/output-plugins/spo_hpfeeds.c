@@ -25,7 +25,7 @@
  *
  * Purpose:  output plugin for hpfeeds publishing
  *
- * Arguments:  
+ * Arguments:
  *
  * Effect:
  *
@@ -77,7 +77,7 @@
 
 /* hpfeeds state machine */
 
-typedef enum { 
+typedef enum {
   S_INIT,
   S_AUTH,
   S_AUTH_DONE,
@@ -120,7 +120,7 @@ static void AlertHPFeedsCleanExit(int signal, void *arg);
 static void HPFeedsAlert(Packet *, char *, void *, Event *);
 
 void HPFeedsPublish(json_t *json, HPFeedsConfig *config);
-void HPFeedsConnect(HPFeedsConfig *config, int reconnect); 
+void HPFeedsConnect(HPFeedsConfig *config, int reconnect);
 
 #endif
 
@@ -217,7 +217,7 @@ static HPFeedsConfig * AlertHPFeedsParseConfig(struct _SnortConfig *sc, char *ar
           char **stoks;
           int num_stoks;
           char *index = toks[count];
-            
+
           while(isspace((int)*index))
             ++index;
 
@@ -284,7 +284,7 @@ static HPFeedsConfig * AlertHPFeedsParseConfig(struct _SnortConfig *sc, char *ar
               FatalError("Argument Error in %s(%i): %s\n",
                          file_name, file_line, index);
             }
-          } 
+          }
 
           mSplitFree(&stoks, num_stoks);
       }
@@ -382,19 +382,19 @@ static void HPFeedsAlert(Packet *p, char *msg, void *arg, Event *event)
     if (event != NULL)
     {
       snprintf(construct_buf, BUF_LEN, "%d:%d:%d", event->sig_generator, event->sig_id, event->sig_rev);
-      json_object_set_new(json_record, "header", json_string(construct_buf));
-      json_object_set_new(json_record, "classification", json_integer(event->classification)); 
-      json_object_set_new(json_record, "priority",       json_integer(event-priority));  
+      json_object_set_new(json_record, "header",         json_string(construct_buf));
+      json_object_set_new(json_record, "classification", json_integer(event->classification));
+      json_object_set_new(json_record, "priority",       json_integer(event->priority));
     }
-    else:
+    else
     {
-      json_object_set_new(json_record, "header", json_string("null"));
-      json_object_set_new(json_record, "classification", json_integer(-1)); 
-      json_object_set_new(json_record, "priority",       json_integer(-1));  
+      json_object_set_new(json_record, "header",         json_string("null"));
+      json_object_set_new(json_record, "classification", json_integer(-1));
+      json_object_set_new(json_record, "priority",       json_integer(-1));
     }
 
-    json_object_set_new(json_record, "signature", json_string((char *) msg ? msg : "null")); 
-    
+    json_object_set_new(json_record, "signature", json_string((char *) msg ? msg : "null"));
+
 
     /* IP */
     if (IPH_IS_VALID(p))
@@ -452,11 +452,11 @@ static void HPFeedsAlert(Packet *p, char *msg, void *arg, Event *event)
               p->eh->ether_dst[4], p->eh->ether_dst[5]);
       json_object_set_new(json_record, "ethdst", json_string((char *) construct_buf));
 
-      snprintf(construct_buf, BUF_LEN, "0x%X", ntohs(p->eh->ether_type)); 
+      snprintf(construct_buf, BUF_LEN, "0x%X", ntohs(p->eh->ether_type));
       json_object_set_new(json_record, "ethtype", json_string((char *)construct_buf));
 
       snprintf(construct_buf, BUF_LEN,"0x%X", p->pkth->pktlen);
-      json_object_set_new(json_record, "ethlen", json_string((char *)construct_buf)); 
+      json_object_set_new(json_record, "ethlen", json_string((char *)construct_buf));
 
     }
 
@@ -471,13 +471,13 @@ static void HPFeedsAlert(Packet *p, char *msg, void *arg, Event *event)
 
       snprintf(construct_buf, BUF_LEN, "0x%lX", (u_long)ntohl(p->tcph->th_win));
       json_object_set_new(json_record, "tcpwin", json_string((char *)construct_buf));
-  
+
       json_object_set_new(json_record, "tcplen", json_integer(TCP_OFFSET(p->tcph) << 2));
 
       char tcpflags[9];
       CreateTCPFlagString(p, tcpflags);
       json_object_set_new(json_record, "tcpflags", json_string((char *)tcpflags));
-  
+
     }
 
     /* UDP */
@@ -545,13 +545,13 @@ static void HPFeedsAlert(Packet *p, char *msg, void *arg, Event *event)
           json_object_set_new(json_record, "tr_rif_len" json_string((char *)construct_buf));
 
           snprintf(construct_buf, BUF_LEN , "0x%X", TRH_MR_BCAST(p->trhmr));
-          json_object_set_new(json_record, "tr_rif_direction" json_string((char *)construct_buf));          
+          json_object_set_new(json_record, "tr_rif_direction" json_string((char *)construct_buf));
 
           snprintf(construct_buf, BUF_LEN , "0x%X", TRH_MR_LF(p->trhmr));
           json_object_set_new(json_record, "tr_rif_frsize" json_string((char *)construct_buf));
 
           snprintf(construct_buf, BUF_LEN , "0x%X", RH_MR_RES(p->trhmr));
-          json_object_set_new(json_record, "tr_rif_res" json_string((char *)construct_buf));       
+          json_object_set_new(json_record, "tr_rif_res" json_string((char *)construct_buf));
 
           sprintf(construct_buf, BUF_LEN, "%X:%X:%X:%X:%X:%X:%X:%X",
                   p->trhmr->rseg[0], p->trhmr->rseg[1], p->trhmr->rseg[2],
@@ -573,7 +573,7 @@ static void HPFeedsAlert(Packet *p, char *msg, void *arg, Event *event)
 
 /* == Reused function for hpfeeds ==
  *
- * Functions: HPFeedsReadMsg 
+ * Functions: HPFeedsReadMsg
  *            HPFeedsGetError
  *            HPFeedsCloseConnection
  *            HPFeedsConnect
@@ -600,7 +600,7 @@ u_char *HPFeedsReadMsg(int sock)
 
     len = 4;
     templen = len;
-    while ((templen > 0) && (len < msglen)) 
+    while ((templen > 0) && (len < msglen))
     {
         templen = read(sock, tempbuf, READ_BLOCK_SIZE);
         memcpy(buffer + len, tempbuf, templen);
@@ -613,16 +613,16 @@ u_char *HPFeedsReadMsg(int sock)
   return buffer;
 }
 
-void HPFeedsGetError(hpf_msg_t *msg) 
+void HPFeedsGetError(hpf_msg_t *msg)
 {
 
   u_char *errmsg;
 
-  if (msg) 
+  if (msg)
   {
     if ((errmsg = calloc(1, msg->hdr.msglen - sizeof(msg->hdr))) == NULL)
       FatalError("log_hpfeeds: Fatal write()\n");
-          
+
     memcpy(errmsg, msg->data, ntohl(msg->hdr.msglen) - sizeof(msg->hdr));
 
     LogMessage("log_hpfeeds: server error: '%s'\n", errmsg);
@@ -642,7 +642,7 @@ void HPFeedsCloseConnection(int * sock)
   }
 }
 
-void HPFeedsConnect(HPFeedsConfig *config, int reconnect) 
+void HPFeedsConnect(HPFeedsConfig *config, int reconnect)
 {
   /* socket already on - returning */
   if (config->sock != -1) return;
@@ -678,7 +678,7 @@ void HPFeedsConnect(HPFeedsConfig *config, int reconnect)
   /* Set connection keep alive */
   int optval = 1;
 
-  if(setsockopt(config->sock, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof(optval)) < 0) 
+  if(setsockopt(config->sock, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof(optval)) < 0)
   {
       HPFeedsCloseConnection(&config->sock);
       FatalError("log_hpfeeds: Fatal setsockopt()\n");
@@ -687,29 +687,29 @@ void HPFeedsConnect(HPFeedsConfig *config, int reconnect)
 
   hpfeeds_session_state_t hpfeeds_state = S_INIT;
 
-  for (;;) 
-  { 
+  for (;;)
+  {
 
-    switch (hpfeeds_state) 
+    switch (hpfeeds_state)
     {
 
       case S_INIT:
 
-        if ((msg = (hpf_msg_t *) HPFeedsReadMsg(config->sock)) == NULL) 
+        if ((msg = (hpf_msg_t *) HPFeedsReadMsg(config->sock)) == NULL)
         {
           HPFeedsCloseConnection(&config->sock);
           break;
         }
 
-        switch (msg->hdr.opcode) 
+        switch (msg->hdr.opcode)
         {
 
           case OP_INFO:
 
             chunk = hpf_msg_get_chunk((u_char *)msg + sizeof(msg->hdr), ntohl(msg->hdr.msglen) - sizeof(msg->hdr));
 
-            if (!chunk) 
-            { 
+            if (!chunk)
+            {
               LogMessage("log_hpfeeds: invalid message format\n");
               hpfeeds_state = S_TERMINATE;
               break;
@@ -747,7 +747,7 @@ void HPFeedsConnect(HPFeedsConfig *config, int reconnect)
         {
           int rv = poll(&config->pfd, 1, 1000);
 
-          if (rv > 0 && config->pfd.revents && POLLIN) 
+          if (rv > 0 && config->pfd.revents && POLLIN)
           {
             hpfeeds_state = S_ERROR;
 
@@ -784,7 +784,7 @@ void HPFeedsConnect(HPFeedsConfig *config, int reconnect)
 }
 
 
-void HPFeedsPublish(json_t *json, HPFeedsConfig *config) 
+void HPFeedsPublish(json_t *json, HPFeedsConfig *config)
 {
 
   char *data = json_dumps(json, 0);
@@ -794,7 +794,7 @@ void HPFeedsPublish(json_t *json, HPFeedsConfig *config)
 
   msg = hpf_msg_publish((u_char *)config->hpfeeds_ident, strlen(config->hpfeeds_ident) \
                         ,(u_char *)config->hpfeeds_channel, strlen(config->hpfeeds_channel), (u_char *)data, len);
-  
+
   if (write(config->sock, (char *) msg, ntohl(msg->hdr.msglen)) == -1)
   {
     HPFeedsCloseConnection(&config->sock);
@@ -813,34 +813,34 @@ void HPFeedsPublish(json_t *json, HPFeedsConfig *config)
   }
 
   /* Do another socket poll - in case of wrong channel */
-  if (config->status != HPFEEDS_READY) 
+  if (config->status != HPFEEDS_READY)
   {
     int rv = poll(&config->pfd, 1, 1000);
 
-    if (rv == 0) 
+    if (rv == 0)
     {
       config->status = HPFEEDS_READY;
       LogMessage("log_hpfeeds: Initial publish done.\n");
     }
-    else if (rv > 0 && config->pfd.revents && POLLIN) 
+    else if (rv > 0 && config->pfd.revents && POLLIN)
     {
 
       config->status = HPFEEDS_NOK;
       hpf_msg_t *error_msg = NULL;
 
-      if ((error_msg = (hpf_msg_t *) HPFeedsReadMsg(config->sock)) != NULL) 
+      if ((error_msg = (hpf_msg_t *) HPFeedsReadMsg(config->sock)) != NULL)
       {
-        
+
         HPFeedsGetError(error_msg);
         LogMessage("log_hpfeeds: Failed to publish.\n");
         HPFeedsCloseConnection(&config->sock);
       }
-      else 
+      else
       {
         FatalError("log_hpfeeds: Something went wrong\n");
       }
 
-    } 
+    }
   }
 
   free(data);
