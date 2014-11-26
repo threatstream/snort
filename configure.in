@@ -445,6 +445,36 @@ AC_DEFUN([FAIL_MESSAGE],[
    exit 1
 ])
 
+
+# Checking for libjansson
+
+AC_CHECK_LIB(jansson, json_dumps, LJANSSON="yes", LJANSSON="no")
+
+if test "$LJANSSON" != "no"; then
+    LIBS="${LIBS} -ljansson"
+else
+    echo
+    echo "   ERROR! libjansson required for hpfeeds support"
+    echo "   Cannot build Snort."
+    echo
+    exit 1
+fi
+
+# Checking for libhpfeeds
+
+AC_CHECK_LIB(hpfeeds, hpf_msg_publish, LHPFEEDS="yes", LHPFEEDS="no")
+
+if test "$LHPFEEDS" != "no"; then
+    LIBS="${LIBS} -lhpfeeds"
+else
+    echo
+    echo "   ERROR! hpfeeds not found"
+    echo "   Get it https://github.com/threatstream/hpfeeds"
+    echo
+    exit 1
+fi
+
+
 AC_ARG_WITH(libpcre_includes,
        [  --with-libpcre-includes=DIR    libpcre include directory],
        [with_libpcre_includes="$withval"],[with_libpcre_includes="no"])

@@ -1,0 +1,21 @@
+$Id$
+
+Overview:
+----
+The hpfeeds output plugin will send snort alert information to hpfeeds broker.
+
+Using this can plugin can decrease snort performance since it is using synchronous socket.
+
+
+Usage:
+----
+
+spo_hpfeeds requires the following format.
+
+output log_hpfeeds: host <host>, ident <ident>, secret <secret>, channel <channel> [ port <port>, reconnect ]
+
+reconnect: reconnect to hpfeeds broker
+port: is optional if not set it will use port 1000.
+ident, secret and channel: are related to hpfeeds
+host: hpfeeds broker
+
