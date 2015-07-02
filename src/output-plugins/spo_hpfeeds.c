@@ -500,65 +500,65 @@ static void HPFeedsAlert(Packet *p, char *msg, void *arg, Event *event)
 
     if (p->trh != NULL)
     {
-      snprint(construct_buf, BUF_LEN, "%X:%X:%X:%X:%X:%X", p->trh->saddr[0],
+      snprintf(construct_buf, BUF_LEN, "%X:%X:%X:%X:%X:%X", p->trh->saddr[0],
             p->trh->saddr[1], p->trh->saddr[2], p->trh->saddr[3],
             p->trh->saddr[4], p->trh->saddr[5]);
-      json_object_set_new(json_record, "tr_src" json_string((char *)construct_buf));
+      json_object_set_new(json_record, "tr_src", json_string((char *)construct_buf));
 
       snprintf(construct_buf, BUF_LEN, "%X:%X:%X:%X:%X:%X", p->trh->daddr[0],
             p->trh->daddr[1], p->trh->daddr[2], p->trh->daddr[3],
             p->trh->daddr[4], p->trh->daddr[5]);
-      json_object_set_new(json_record, "tr_dst" json_string((char *)construct_buf));
+      json_object_set_new(json_record, "tr_dst", json_string((char *)construct_buf));
 
       snprintf(construct_buf, BUF_LEN, "0x%X", p->trh->ac);
-      json_object_set_new(json_record, "tr_ac" json_string((char *)construct_buf));
+      json_object_set_new(json_record, "tr_ac", json_string((char *)construct_buf));
 
       snprintf(construct_buf, BUF_LEN , "0x%X", p->trh->fc);
-      json_object_set_new(json_record, "tr_fc" json_string((char *)construct_buf));
+      json_object_set_new(json_record, "tr_fc", json_string((char *)construct_buf));
 
       if(!p->trhllc)
       {
 
         snprintf(construct_buf, BUF_LEN , "0x%X", p->trhllc->dsap);
-        json_object_set_new(json_record, "tr_dsap" json_string((char *)construct_buf));
+        json_object_set_new(json_record, "tr_dsap", json_string((char *)construct_buf));
 
 
         snprintf(construct_buf, BUF_LEN , "0x%X", p->trhllc->ssap);
-        json_object_set_new(json_record, "tr_ssap" json_string((char *)construct_buf));
+        json_object_set_new(json_record, "tr_ssap", json_string((char *)construct_buf));
 
 
         snprintf(construct_buf, BUF_LEN , "%X%X%X", p->trhllc->protid[0],
                  p->trhllc->protid[1], p->trhllc->protid[2]);
-        json_object_set_new(json_record, "tr_protid" json_string((char *)construct_buf));
+        json_object_set_new(json_record, "tr_protid", json_string((char *)construct_buf));
 
 
         snprintf(construct_buf, BUF_LEN , "%X", p->trhllc->ethertype);
-        json_object_set_new(json_record, "tr_ethtype" json_string((char *)construct_buf));
+        json_object_set_new(json_record, "tr_ethtype", json_string((char *)construct_buf));
 
 
         if(p->trhmr)
         {
           snprintf(construct_buf, BUF_LEN , "0x%X", TRH_MR_BCAST(p->trhmr));
-          json_object_set_new(json_record, "tr_rif_bcast" json_string((char *)construct_buf));
+          json_object_set_new(json_record, "tr_rif_bcast", json_string((char *)construct_buf));
 
           snprintf(construct_buf, BUF_LEN , "0x%X", TRH_MR_LEN(p->trhmr));
-          json_object_set_new(json_record, "tr_rif_len" json_string((char *)construct_buf));
+          json_object_set_new(json_record, "tr_rif_len", json_string((char *)construct_buf));
 
           snprintf(construct_buf, BUF_LEN , "0x%X", TRH_MR_BCAST(p->trhmr));
-          json_object_set_new(json_record, "tr_rif_direction" json_string((char *)construct_buf));
+          json_object_set_new(json_record, "tr_rif_direction", json_string((char *)construct_buf));
 
           snprintf(construct_buf, BUF_LEN , "0x%X", TRH_MR_LF(p->trhmr));
-          json_object_set_new(json_record, "tr_rif_frsize" json_string((char *)construct_buf));
+          json_object_set_new(json_record, "tr_rif_frsize", json_string((char *)construct_buf));
 
-          snprintf(construct_buf, BUF_LEN , "0x%X", RH_MR_RES(p->trhmr));
-          json_object_set_new(json_record, "tr_rif_res" json_string((char *)construct_buf));
+          snprintf(construct_buf, BUF_LEN , "0x%X", TRH_MR_RES(p->trhmr));
+          json_object_set_new(json_record, "tr_rif_res", json_string((char *)construct_buf));
 
           sprintf(construct_buf, BUF_LEN, "%X:%X:%X:%X:%X:%X:%X:%X",
                   p->trhmr->rseg[0], p->trhmr->rseg[1], p->trhmr->rseg[2],
                   p->trhmr->rseg[3], p->trhmr->rseg[4], p->trhmr->rseg[5],
                   p->trhmr->rseg[6], p->trhmr->rseg[7]);
 
-          json_object_set_new(json_record, "tr_rseg" json_string((char *)construct_buf));
+          json_object_set_new(json_record, "tr_rseg", json_string((char *)construct_buf));
         }
       }
     }
